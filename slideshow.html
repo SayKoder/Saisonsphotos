@@ -6,380 +6,73 @@
 <meta name="theme-color" content="#000000">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <title>Diaporama</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --accent: #e8d5b0;
-    --dark: #0a0a0a;
-    --glass: rgba(255,255,255,0.08);
-  }
-
-  body {
-    background: var(--dark);
-    color: #fff;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    overflow: hidden;
-    height: 100dvh;
-    width: 100vw;
-  }
-
-  /* ─── ÉCRAN DE CONNEXION ─── */
-  #login-screen {
-    position: fixed; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 2rem;
-    background: radial-gradient(ellipse at 30% 40%, #1a1208 0%, #000 70%);
-    z-index: 100;
-  }
-
-  .login-title {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    font-weight: 300;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    text-align: center;
-  }
-
-  .login-subtitle {
-    font-size: 1rem;
-    font-weight: 300;
-    letter-spacing: 0.2em;
-    color: rgba(255,255,255,0.4);
-    text-transform: uppercase;
-    font-family: system-ui, sans-serif;
-  }
-
-  .btn-google {
-    display: flex; align-items: center; gap: 0.75rem;
-    padding: 0.9rem 2rem;
-    background: var(--glass);
-    border: 1px solid rgba(232,213,176,0.3);
-    border-radius: 4px;
-    color: var(--accent);
-    font-family: system-ui, sans-serif;
-    font-size: 0.95rem;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    transition: all 0.3s;
-    backdrop-filter: blur(10px);
-  }
-  .btn-google:hover {
-    background: rgba(232,213,176,0.12);
-    border-color: var(--accent);
-  }
+  :root { --accent: #e8d5b0; --dark: #0a0a0a; --glass: rgba(255,255,255,0.08); }
+  body { background: var(--dark); color: #fff; font-family: 'Cormorant Garamond', Georgia, serif; overflow: hidden; height: 100dvh; width: 100vw; }
+  #login-screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; background: radial-gradient(ellipse at 30% 40%, #1a1208 0%, #000 70%); z-index: 100; }
+  .login-title { font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 300; letter-spacing: 0.15em; color: var(--accent); text-align: center; }
+  .login-subtitle { font-size: 1rem; font-weight: 300; letter-spacing: 0.2em; color: rgba(255,255,255,0.4); text-transform: uppercase; font-family: system-ui, sans-serif; }
+  .btn-google { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 2rem; background: var(--glass); border: 1px solid rgba(232,213,176,0.3); border-radius: 4px; color: var(--accent); font-family: system-ui, sans-serif; font-size: 0.95rem; letter-spacing: 0.05em; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px); }
+  .btn-google:hover { background: rgba(232,213,176,0.12); border-color: var(--accent); }
   .btn-google svg { width: 20px; height: 20px; }
-
-  /* ─── SÉLECTEUR D'ALBUM ─── */
-  #album-screen {
-    position: fixed; inset: 0;
-    display: none; flex-direction: column;
-    background: #080808;
-    z-index: 90;
-    overflow-y: auto;
-  }
-
-  .album-header {
-    padding: 2rem 2rem 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0;
-    background: #080808;
-    z-index: 2;
-  }
-
-  .album-header h2 {
-    font-size: 1.4rem;
-    font-weight: 300;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-  }
-
-  .btn-settings {
-    background: none; border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.5); padding: 0.4rem 1rem;
-    border-radius: 3px; cursor: pointer;
-    font-family: system-ui, sans-serif; font-size: 0.8rem;
-    letter-spacing: 0.05em; transition: all 0.2s;
-  }
+  #album-screen { position: fixed; inset: 0; display: none; flex-direction: column; background: #080808; z-index: 90; overflow-y: auto; }
+  .album-header { padding: 2rem 2rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: #080808; z-index: 2; }
+  .album-header h2 { font-size: 1.4rem; font-weight: 300; letter-spacing: 0.1em; color: var(--accent); }
+  .btn-settings { background: none; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); padding: 0.4rem 1rem; border-radius: 3px; cursor: pointer; font-family: system-ui, sans-serif; font-size: 0.8rem; letter-spacing: 0.05em; transition: all 0.2s; }
   .btn-settings:hover { border-color: var(--accent); color: var(--accent); }
-
-  .album-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1px;
-    padding: 1px;
-  }
-
-  .album-card {
-    aspect-ratio: 1;
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    background: #111;
-  }
-
-  .album-card img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s ease, filter 0.4s;
-    filter: brightness(0.7);
-  }
-
-  .album-card:hover img, .album-card:focus img {
-    transform: scale(1.05);
-    filter: brightness(0.9);
-  }
-
-  .album-card-info {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    padding: 0.75rem 0.6rem 0.6rem;
-    background: linear-gradient(transparent, rgba(0,0,0,0.85));
-    font-family: system-ui, sans-serif;
-  }
-
-  .album-card-name {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: #fff;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-
-  .album-card-count {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.5);
-    margin-top: 2px;
-  }
-
-  .loading-msg {
-    text-align: center;
-    padding: 4rem 2rem;
-    color: rgba(255,255,255,0.3);
-    font-family: system-ui, sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 0.1em;
-  }
-
-  /* ─── PANNEAU PARAMÈTRES ─── */
-  #settings-panel {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 200;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(8px);
-  }
-
-  .settings-box {
-    background: #111;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    padding: 2rem;
-    width: min(380px, 90vw);
-    display: flex; flex-direction: column; gap: 1.5rem;
-  }
-
-  .settings-box h3 {
-    font-size: 1.2rem; font-weight: 300;
-    letter-spacing: 0.1em; color: var(--accent);
-  }
-
-  .setting-row {
-    display: flex; flex-direction: column; gap: 0.5rem;
-  }
-
-  .setting-row label {
-    font-family: system-ui, sans-serif;
-    font-size: 0.8rem; letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.5);
-    text-transform: uppercase;
-  }
-
-  .setting-row input[type=range] {
-    width: 100%; accent-color: var(--accent);
-  }
-
-  .setting-row select {
-    background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1);
-    color: #fff; padding: 0.5rem;
-    border-radius: 4px; font-family: system-ui, sans-serif;
-    font-size: 0.9rem; cursor: pointer;
-  }
-
-  .setting-val {
-    font-family: system-ui, sans-serif;
-    font-size: 0.85rem; color: var(--accent);
-    text-align: right;
-  }
-
-  .settings-actions {
-    display: flex; gap: 0.75rem; justify-content: flex-end;
-  }
-
-  .btn-primary {
-    padding: 0.6rem 1.5rem;
-    background: var(--accent); color: #000;
-    border: none; border-radius: 3px;
-    font-family: system-ui, sans-serif;
-    font-size: 0.85rem; font-weight: 600;
-    letter-spacing: 0.05em; cursor: pointer;
-    transition: opacity 0.2s;
-  }
+  .album-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; padding: 1px; }
+  .album-card { aspect-ratio: 1; position: relative; cursor: pointer; overflow: hidden; background: #111; }
+  .album-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease, filter 0.4s; filter: brightness(0.7); }
+  .album-card:hover img { transform: scale(1.05); filter: brightness(0.9); }
+  .album-card-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.75rem 0.6rem 0.6rem; background: linear-gradient(transparent, rgba(0,0,0,0.85)); font-family: system-ui, sans-serif; }
+  .album-card-name { font-size: 0.8rem; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .album-card-count { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .loading-msg { text-align: center; padding: 4rem 2rem; color: rgba(255,255,255,0.3); font-family: system-ui, sans-serif; font-size: 0.9rem; letter-spacing: 0.1em; }
+  #settings-panel { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+  .settings-box { background: #111; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 2rem; width: min(380px, 90vw); display: flex; flex-direction: column; gap: 1.5rem; }
+  .settings-box h3 { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.1em; color: var(--accent); }
+  .setting-row { display: flex; flex-direction: column; gap: 0.5rem; }
+  .setting-row label { font-family: system-ui, sans-serif; font-size: 0.8rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+  .setting-row input[type=range] { width: 100%; accent-color: var(--accent); }
+  .setting-row select { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.5rem; border-radius: 4px; font-family: system-ui, sans-serif; font-size: 0.9rem; cursor: pointer; }
+  .setting-val { font-family: system-ui, sans-serif; font-size: 0.85rem; color: var(--accent); text-align: right; }
+  .settings-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+  .btn-primary { padding: 0.6rem 1.5rem; background: var(--accent); color: #000; border: none; border-radius: 3px; font-family: system-ui, sans-serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; cursor: pointer; transition: opacity 0.2s; }
   .btn-primary:hover { opacity: 0.85; }
-
-  .btn-secondary {
-    padding: 0.6rem 1.5rem;
-    background: none;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.5);
-    border-radius: 3px;
-    font-family: system-ui, sans-serif;
-    font-size: 0.85rem; cursor: pointer;
-    transition: all 0.2s;
-  }
+  .btn-secondary { padding: 0.6rem 1.5rem; background: none; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); border-radius: 3px; font-family: system-ui, sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
   .btn-secondary:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
-
-  /* ─── DIAPORAMA ─── */
-  #slideshow-screen {
-    position: fixed; inset: 0;
-    display: none;
-    background: #000;
-    z-index: 50;
-  }
-
-  .slide {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0;
-    transition: opacity 1.2s ease-in-out;
-  }
-
+  #slideshow-screen { position: fixed; inset: 0; display: none; background: #000; z-index: 50; }
+  .slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.2s ease-in-out; }
   .slide.active { opacity: 1; }
-
-  .slide img {
-    max-width: 100%; max-height: 100%;
-    width: 100%; height: 100%;
-    object-fit: contain;
-  }
-
-  .slide-bg {
-    position: absolute; inset: -10px;
-    background-size: cover; background-position: center;
-    filter: blur(20px) brightness(0.3) saturate(0.6);
-    transform: scale(1.05);
-    z-index: -1;
-  }
-
-  /* HUD */
-  #hud {
-    position: fixed; inset: 0;
-    z-index: 60;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-
+  .slide img { max-width: 100%; max-height: 100%; width: 100%; height: 100%; object-fit: contain; }
+  .slide-bg { position: absolute; inset: -10px; background-size: cover; background-position: center; filter: blur(20px) brightness(0.3) saturate(0.6); transform: scale(1.05); z-index: -1; }
+  #hud { position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: 0; transition: opacity 0.4s; }
   #hud.visible { opacity: 1; pointer-events: all; }
-
-  .hud-top {
-    position: absolute; top: 0; left: 0; right: 0;
-    padding: 1.5rem 2rem;
-    display: flex; justify-content: space-between; align-items: center;
-    background: linear-gradient(rgba(0,0,0,0.7), transparent);
-  }
-
-  .hud-album-name {
-    font-size: 1rem; font-weight: 300;
-    letter-spacing: 0.15em; color: var(--accent);
-    font-family: 'Cormorant Garamond', Georgia, serif;
-  }
-
-  .hud-controls {
-    display: flex; gap: 0.75rem;
-  }
-
-  .hud-btn {
-    background: rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.8);
-    padding: 0.5rem 1rem;
-    border-radius: 3px; cursor: pointer;
-    font-family: system-ui, sans-serif;
-    font-size: 0.8rem; letter-spacing: 0.05em;
-    transition: all 0.2s;
-    backdrop-filter: blur(6px);
-  }
-
+  .hud-top { position: absolute; top: 0; left: 0; right: 0; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(rgba(0,0,0,0.7), transparent); }
+  .hud-album-name { font-size: 1rem; font-weight: 300; letter-spacing: 0.15em; color: var(--accent); }
+  .hud-controls { display: flex; gap: 0.75rem; }
+  .hud-btn { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); padding: 0.5rem 1rem; border-radius: 3px; cursor: pointer; font-family: system-ui, sans-serif; font-size: 0.8rem; letter-spacing: 0.05em; transition: all 0.2s; backdrop-filter: blur(6px); }
   .hud-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-  .hud-bottom {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    padding: 1rem 2rem 1.5rem;
-    display: flex; justify-content: center; align-items: center; gap: 2rem;
-    background: linear-gradient(transparent, rgba(0,0,0,0.7));
-  }
-
-  .hud-nav-btn {
-    background: rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #fff; width: 44px; height: 44px;
-    border-radius: 50%; cursor: pointer;
-    font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s; backdrop-filter: blur(6px);
-  }
+  .hud-bottom { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem 2rem 1.5rem; display: flex; justify-content: center; align-items: center; gap: 2rem; background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
+  .hud-nav-btn { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; backdrop-filter: blur(6px); }
   .hud-nav-btn:hover { border-color: var(--accent); }
-
-  #progress-bar {
-    flex: 1; max-width: 200px;
-    height: 2px; background: rgba(255,255,255,0.15);
-    border-radius: 1px; overflow: hidden;
-  }
-
-  #progress-fill {
-    height: 100%; width: 0%;
-    background: var(--accent);
-    transition: width linear;
-  }
-
-  .slide-counter {
-    font-family: system-ui, sans-serif;
-    font-size: 0.75rem; letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.4);
-    min-width: 60px; text-align: center;
-  }
-
-  /* Indicateur chargement */
-  .spinner {
-    width: 32px; height: 32px;
-    border: 2px solid rgba(255,255,255,0.1);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
+  #progress-bar { flex: 1; max-width: 200px; height: 2px; background: rgba(255,255,255,0.15); border-radius: 1px; overflow: hidden; }
+  #progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width linear; }
+  .slide-counter { font-family: system-ui, sans-serif; font-size: 0.75rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); min-width: 60px; text-align: center; }
+  .spinner { width: 32px; height: 32px; border: 2px solid rgba(255,255,255,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .error-msg {
-    color: #ff6b6b;
-    font-family: system-ui, sans-serif;
-    font-size: 0.85rem; text-align: center;
-    padding: 1rem;
-  }
+  .error-msg { color: #ff6b6b; font-family: system-ui, sans-serif; font-size: 0.85rem; text-align: center; padding: 1rem; }
 </style>
 </head>
 <body>
 
 <script>
-  const CLIENT_ID = '946708587326-745ndlkq4uuid9vrtnnlrudm74dap9vq.apps.googleusercontent.com';
+  const CLIENT_ID = 'TON_CLIENT_ID_ICI.apps.googleusercontent.com';
 </script>
 
-<!-- ─── ÉCRAN CONNEXION ─── -->
 <div id="login-screen">
   <div>
     <div class="login-title">Diaporama</div>
@@ -397,22 +90,13 @@
   <div id="login-error" class="error-msg" style="display:none"></div>
 </div>
 
-<!-- ─── PANNEAU PARAMÈTRES ─── -->
 <div id="settings-panel">
   <div class="settings-box">
     <h3>Paramètres</h3>
     <div class="setting-row">
       <label>Durée par photo</label>
-      <input type="range" id="duration-slider" min="2" max="30" value="6" step="1"
-             oninput="document.getElementById('duration-val').textContent=this.value+'s'">
+      <input type="range" id="duration-slider" min="2" max="30" value="6" step="1" oninput="document.getElementById('duration-val').textContent=this.value+'s'">
       <div class="setting-val" id="duration-val">6s</div>
-    </div>
-    <div class="setting-row">
-      <label>Transition</label>
-      <select id="transition-select">
-        <option value="fade">Fondu</option>
-        <option value="slow-fade">Fondu lent</option>
-      </select>
     </div>
     <div class="setting-row">
       <label>Ordre</label>
@@ -428,21 +112,16 @@
   </div>
 </div>
 
-<!-- ─── SÉLECTION ALBUM ─── -->
 <div id="album-screen">
   <div class="album-header">
     <h2>Choisir un album</h2>
     <button class="btn-settings" onclick="openSettings()">⚙ Paramètres</button>
   </div>
-  <div id="album-grid" class="album-grid">
-    <div class="loading-msg">Chargement des albums…</div>
-  </div>
+  <div id="album-grid" class="album-grid"><div class="loading-msg">Chargement…</div></div>
 </div>
 
-<!-- ─── DIAPORAMA ─── -->
 <div id="slideshow-screen">
   <div id="slides-container"></div>
-
   <div id="hud">
     <div class="hud-top">
       <div class="hud-album-name" id="hud-album-name"></div>
@@ -461,312 +140,212 @@
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-//  CONFIGURATION
-// ═══════════════════════════════════════════
 const SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly';
 const API_BASE = 'https://photoslibrary.googleapis.com/v1';
+const REDIRECT_URI = window.location.origin + window.location.pathname;
 
-// ═══════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════
 let accessToken = null;
 let photos = [];
 let currentIndex = 0;
 let slideshowTimer = null;
-let progressTimer = null;
 let isPaused = false;
 let hudTimeout = null;
-let settings = {
-  duration: 6,
-  transition: 'fade',
-  order: 'random'
-};
-let currentAlbumTitle = '';
+let settings = { duration: 6, order: 'random' };
 
-// ═══════════════════════════════════════════
-//  AUTH
-// ═══════════════════════════════════════════
-function signIn() {
-  if (!CLIENT_ID || CLIENT_ID === 'TON_CLIENT_ID_ICI.apps.googleusercontent.com') {
-    showLoginError('⚠ Configure ton Client ID en haut du fichier HTML.');
-    return;
-  }
-
-  const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-  authUrl.searchParams.set('client_id', CLIENT_ID);
-  authUrl.searchParams.set('redirect_uri', window.location.href.split('?')[0]);
-  authUrl.searchParams.set('response_type', 'token');
-  authUrl.searchParams.set('scope', SCOPE);
-  authUrl.searchParams.set('prompt', 'consent');
-  authUrl.searchParams.set('include_granted_scopes', 'true');
-
-  window.location.href = authUrl.toString();
+// PKCE helpers
+function generateRandomString(n) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+  const arr = new Uint8Array(n);
+  crypto.getRandomValues(arr);
+  return Array.from(arr).map(b => chars[b % chars.length]).join('');
+}
+async function sha256(plain) {
+  return crypto.subtle.digest('SHA-256', new TextEncoder().encode(plain));
+}
+function base64url(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
 }
 
-// Récupère le token depuis l'URL après redirect OAuth
-(function checkTokenInUrl() {
-  const hash = window.location.hash.substring(1);
-  const params = new URLSearchParams(hash);
-  const token = params.get('access_token');
-  if (token) {
-    accessToken = token;
-    history.replaceState(null, '', window.location.pathname);
-    showAlbumScreen();
+// Auth
+async function signIn() {
+  if (!CLIENT_ID || CLIENT_ID.includes('TON_CLIENT_ID')) {
+    showLoginError('Configure ton Client ID dans le fichier HTML.');
+    return;
   }
-})();
+  const verifier = generateRandomString(64);
+  const challenge = base64url(await sha256(verifier));
+  const state = generateRandomString(16);
+  sessionStorage.setItem('pkce_v', verifier);
+  sessionStorage.setItem('pkce_s', state);
+
+  const url = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+  url.searchParams.set('client_id', CLIENT_ID);
+  url.searchParams.set('redirect_uri', REDIRECT_URI);
+  url.searchParams.set('response_type', 'code');
+  url.searchParams.set('scope', SCOPE);
+  url.searchParams.set('code_challenge', challenge);
+  url.searchParams.set('code_challenge_method', 'S256');
+  url.searchParams.set('state', state);
+  url.searchParams.set('prompt', 'consent');
+  window.location.href = url.toString();
+}
+
+async function handleCallback() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  if (!code) return;
+  if (params.get('error')) { showLoginError('Erreur : ' + params.get('error')); history.replaceState(null,'',location.pathname); return; }
+
+  history.replaceState(null, '', location.pathname);
+  const verifier = sessionStorage.getItem('pkce_v');
+
+  try {
+    const resp = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ client_id: CLIENT_ID, code, code_verifier: verifier, grant_type: 'authorization_code', redirect_uri: REDIRECT_URI })
+    });
+    const data = await resp.json();
+    if (data.error) { showLoginError('Erreur token : ' + data.error_description); return; }
+    accessToken = data.access_token;
+    sessionStorage.removeItem('pkce_v');
+    sessionStorage.removeItem('pkce_s');
+    showAlbumScreen();
+  } catch(e) { showLoginError('Erreur réseau : ' + e.message); }
+}
 
 function showLoginError(msg) {
   const el = document.getElementById('login-error');
-  el.textContent = msg;
-  el.style.display = 'block';
+  el.textContent = msg; el.style.display = 'block';
 }
 
-// ═══════════════════════════════════════════
-//  ALBUMS
-// ═══════════════════════════════════════════
+// Albums
 async function showAlbumScreen() {
   document.getElementById('login-screen').style.display = 'none';
-  const albumScreen = document.getElementById('album-screen');
-  albumScreen.style.display = 'flex';
-
+  document.getElementById('album-screen').style.display = 'flex';
   const grid = document.getElementById('album-grid');
   grid.innerHTML = '<div class="loading-msg"><div class="spinner" style="margin:auto"></div></div>';
 
   try {
-    let allAlbums = [];
-    let pageToken = null;
-
+    let all = [], pt = null;
     do {
-      const url = pageToken
-        ? `${API_BASE}/albums?pageSize=50&pageToken=${pageToken}`
-        : `${API_BASE}/albums?pageSize=50`;
-      const resp = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
-      const data = await resp.json();
-      if (data.albums) allAlbums = allAlbums.concat(data.albums);
-      pageToken = data.nextPageToken || null;
-    } while (pageToken);
+      const url = `${API_BASE}/albums?pageSize=50` + (pt ? `&pageToken=${pt}` : '');
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+      const d = await r.json();
+      if (d.error) throw new Error(d.error.message);
+      if (d.albums) all = all.concat(d.albums);
+      pt = d.nextPageToken || null;
+    } while (pt);
 
-    if (!allAlbums.length) {
-      grid.innerHTML = '<div class="loading-msg">Aucun album trouvé.</div>';
-      return;
-    }
+    if (!all.length) { grid.innerHTML = '<div class="loading-msg">Aucun album trouvé.<br><small style="opacity:0.5">Crée un album dans Google Photos d\'abord.</small></div>'; return; }
 
     grid.innerHTML = '';
-    allAlbums.forEach(album => {
+    all.forEach(album => {
       const card = document.createElement('div');
-      card.className = 'album-card';
-      card.tabIndex = 0;
+      card.className = 'album-card'; card.tabIndex = 0;
       card.innerHTML = `
-        ${album.coverPhotoBaseUrl
-          ? `<img src="${album.coverPhotoBaseUrl}=w320-h320-c" alt="${album.title}" loading="lazy">`
-          : '<div style="background:#1a1a1a;width:100%;height:100%"></div>'}
+        ${album.coverPhotoBaseUrl ? `<img src="${album.coverPhotoBaseUrl}=w320-h320-c" loading="lazy">` : '<div style="background:#1a1a1a;width:100%;height:100%"></div>'}
         <div class="album-card-info">
           <div class="album-card-name">${album.title || 'Sans titre'}</div>
           <div class="album-card-count">${album.mediaItemsCount || '?'} photos</div>
-        </div>
-      `;
+        </div>`;
       card.onclick = () => startSlideshow(album);
-      card.onkeydown = (e) => { if (e.key === 'Enter') startSlideshow(album); };
       grid.appendChild(card);
     });
-  } catch (err) {
-    grid.innerHTML = `<div class="loading-msg error-msg">Erreur : ${err.message}</div>`;
-  }
+  } catch(e) { grid.innerHTML = `<div class="loading-msg error-msg">Erreur : ${e.message}</div>`; }
 }
 
-// ═══════════════════════════════════════════
-//  CHARGEMENT PHOTOS
-// ═══════════════════════════════════════════
 async function loadAlbumPhotos(albumId) {
-  let allPhotos = [];
-  let pageToken = null;
-
+  let all = [], pt = null;
   do {
     const body = { albumId, pageSize: 100 };
-    if (pageToken) body.pageToken = pageToken;
-
-    const resp = await fetch(`${API_BASE}/mediaItems:search`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-    const data = await resp.json();
-    if (data.mediaItems) allPhotos = allPhotos.concat(data.mediaItems);
-    pageToken = data.nextPageToken || null;
-  } while (pageToken);
-
-  // Garder uniquement les photos (pas les vidéos)
-  return allPhotos.filter(item => item.mimeType && item.mimeType.startsWith('image/'));
+    if (pt) body.pageToken = pt;
+    const r = await fetch(`${API_BASE}/mediaItems:search`, { method:'POST', headers:{ Authorization:`Bearer ${accessToken}`, 'Content-Type':'application/json' }, body: JSON.stringify(body) });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error.message);
+    if (d.mediaItems) all = all.concat(d.mediaItems);
+    pt = d.nextPageToken || null;
+  } while (pt);
+  return all.filter(i => i.mimeType && i.mimeType.startsWith('image/'));
 }
 
-// ═══════════════════════════════════════════
-//  DIAPORAMA
-// ═══════════════════════════════════════════
+// Slideshow
 async function startSlideshow(album) {
   document.getElementById('album-screen').style.display = 'none';
-  const slideshow = document.getElementById('slideshow-screen');
-  slideshow.style.display = 'block';
-
+  document.getElementById('slideshow-screen').style.display = 'block';
   const container = document.getElementById('slides-container');
-  container.innerHTML = '<div class="loading-msg" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:1rem;"><div class="spinner"></div><span style="font-family:system-ui;color:rgba(255,255,255,0.4);font-size:0.9rem;letter-spacing:0.1em">Chargement…</span></div>';
-
-  currentAlbumTitle = album.title || 'Album';
-  document.getElementById('hud-album-name').textContent = currentAlbumTitle;
+  container.innerHTML = '<div class="loading-msg" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:1rem;"><div class="spinner"></div><span style="font-family:system-ui;color:rgba(255,255,255,0.4);font-size:0.9rem">Chargement…</span></div>';
+  document.getElementById('hud-album-name').textContent = album.title || 'Album';
 
   try {
     photos = await loadAlbumPhotos(album.id);
-
-    if (!photos.length) {
-      container.innerHTML = '<div class="loading-msg">Aucune photo dans cet album.</div>';
-      return;
-    }
-
+    if (!photos.length) { container.innerHTML = '<div class="loading-msg">Aucune photo dans cet album.</div>'; return; }
     if (settings.order === 'random') shuffle(photos);
-
-    currentIndex = 0;
-    isPaused = false;
+    currentIndex = 0; isPaused = false;
     document.getElementById('pause-btn').textContent = '⏸ Pause';
-
-    buildSlides();
-    showSlide(0);
-    scheduleNext();
-    setupHudInteraction();
-  } catch(err) {
-    container.innerHTML = `<div class="loading-msg error-msg">Erreur : ${err.message}</div>`;
-  }
+    container.innerHTML = '';
+    showSlide(0); scheduleNext(); setupHud();
+  } catch(e) { container.innerHTML = `<div class="loading-msg error-msg">Erreur : ${e.message}</div>`; }
 }
 
-function buildSlides() {
-  const container = document.getElementById('slides-container');
-  container.innerHTML = '';
-
-  // On prépare 3 slides en DOM (current, next, prev) pour performance
-  // et on swap les images
-  for (let i = 0; i < Math.min(photos.length, 3); i++) {
-    container.appendChild(createSlideEl(i));
-  }
-}
-
-function createSlideEl(index) {
-  const photo = photos[index];
+function createSlide(index) {
+  const p = photos[index];
   const div = document.createElement('div');
-  div.className = 'slide';
-  div.dataset.index = index;
-
+  div.className = 'slide'; div.dataset.index = index;
   const bg = document.createElement('div');
   bg.className = 'slide-bg';
-  bg.style.backgroundImage = `url(${photo.baseUrl}=w200)`;
-
+  bg.style.backgroundImage = `url(${p.baseUrl}=w200)`;
   const img = document.createElement('img');
-  const screen = Math.max(window.innerWidth, window.innerHeight);
-  img.src = `${photo.baseUrl}=w${screen}-h${screen}`;
-  img.alt = photo.filename || '';
-
-  div.appendChild(bg);
-  div.appendChild(img);
+  const sz = Math.max(window.innerWidth, window.innerHeight);
+  img.src = `${p.baseUrl}=w${sz}-h${sz}`;
+  div.appendChild(bg); div.appendChild(img);
   return div;
 }
 
 function showSlide(index) {
-  const container = document.getElementById('slides-container');
-  const slides = container.querySelectorAll('.slide');
-
-  slides.forEach(s => s.classList.remove('active'));
-
-  // Trouver ou créer le slide pour cet index
-  let target = container.querySelector(`.slide[data-index="${index}"]`);
-  if (!target) {
-    target = createSlideEl(index);
-    container.appendChild(target);
-  }
-
-  // Forcer reflow pour la transition
-  void target.offsetWidth;
-  target.classList.add('active');
-
-  // Supprimer les vieux slides (garder max 3)
-  const allSlides = container.querySelectorAll('.slide');
-  if (allSlides.length > 3) {
-    allSlides[0].remove();
-  }
-
-  // Précharger le suivant
-  const nextIdx = (index + 1) % photos.length;
-  if (!container.querySelector(`.slide[data-index="${nextIdx}"]`)) {
-    const next = createSlideEl(nextIdx);
-    container.appendChild(next);
-  }
-
-  // Mettre à jour le compteur
-  document.getElementById('slide-counter').textContent = `${index + 1} / ${photos.length}`;
-
-  // Barre de progression
+  const c = document.getElementById('slides-container');
+  c.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  let t = c.querySelector(`.slide[data-index="${index}"]`);
+  if (!t) { t = createSlide(index); c.appendChild(t); }
+  void t.offsetWidth; t.classList.add('active');
+  if (c.querySelectorAll('.slide').length > 3) c.querySelectorAll('.slide')[0].remove();
+  const ni = (index+1) % photos.length;
+  if (!c.querySelector(`.slide[data-index="${ni}"]`)) c.appendChild(createSlide(ni));
+  document.getElementById('slide-counter').textContent = `${index+1} / ${photos.length}`;
   startProgress();
 }
 
 function scheduleNext() {
   clearTimeout(slideshowTimer);
-  slideshowTimer = setTimeout(() => {
-    if (!isPaused) nextSlide();
-  }, settings.duration * 1000);
+  slideshowTimer = setTimeout(() => { if (!isPaused) nextSlide(); }, settings.duration * 1000);
 }
 
-function nextSlide() {
-  currentIndex = (currentIndex + 1) % photos.length;
-  showSlide(currentIndex);
-  if (!isPaused) scheduleNext();
-}
-
-function prevSlide() {
-  currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-  showSlide(currentIndex);
-  clearTimeout(slideshowTimer);
-  if (!isPaused) scheduleNext();
-}
+function nextSlide() { currentIndex = (currentIndex+1) % photos.length; showSlide(currentIndex); if (!isPaused) scheduleNext(); }
+function prevSlide() { currentIndex = (currentIndex-1+photos.length) % photos.length; showSlide(currentIndex); clearTimeout(slideshowTimer); if (!isPaused) scheduleNext(); }
 
 function startProgress() {
-  clearInterval(progressTimer);
-  const fill = document.getElementById('progress-fill');
-  fill.style.transition = 'none';
-  fill.style.width = '0%';
-  void fill.offsetWidth;
-  fill.style.transition = `width ${settings.duration}s linear`;
-  fill.style.width = '100%';
+  const f = document.getElementById('progress-fill');
+  f.style.transition = 'none'; f.style.width = '0%';
+  void f.offsetWidth;
+  f.style.transition = `width ${settings.duration}s linear`; f.style.width = '100%';
 }
 
 function togglePause() {
   isPaused = !isPaused;
   const btn = document.getElementById('pause-btn');
-
   if (isPaused) {
     clearTimeout(slideshowTimer);
-    clearInterval(progressTimer);
-    const fill = document.getElementById('progress-fill');
-    const computed = window.getComputedStyle(fill).width;
-    const total = fill.parentElement.offsetWidth;
-    const pct = (parseFloat(computed) / total * 100).toFixed(1);
-    fill.style.transition = 'none';
-    fill.style.width = pct + '%';
+    const f = document.getElementById('progress-fill');
+    const pct = (parseFloat(getComputedStyle(f).width) / f.parentElement.offsetWidth * 100).toFixed(1);
+    f.style.transition = 'none'; f.style.width = pct + '%';
     btn.textContent = '▶ Reprendre';
-  } else {
-    scheduleNext();
-    startProgress();
-    btn.textContent = '⏸ Pause';
-  }
+  } else { scheduleNext(); startProgress(); btn.textContent = '⏸ Pause'; }
 }
 
-// ═══════════════════════════════════════════
-//  HUD (tap pour afficher/cacher)
-// ═══════════════════════════════════════════
-function setupHudInteraction() {
-  const slideshow = document.getElementById('slideshow-screen');
+function setupHud() {
+  const ss = document.getElementById('slideshow-screen');
   const hud = document.getElementById('hud');
-
-  slideshow.onclick = (e) => {
+  ss.onclick = (e) => {
     if (e.target.closest('.hud-btn') || e.target.closest('.hud-nav-btn')) return;
     hud.classList.add('visible');
     clearTimeout(hudTimeout);
@@ -775,72 +354,34 @@ function setupHudInteraction() {
 }
 
 function goBackToAlbums() {
-  clearTimeout(slideshowTimer);
-  clearInterval(progressTimer);
-  clearTimeout(hudTimeout);
+  clearTimeout(slideshowTimer); clearTimeout(hudTimeout);
   document.getElementById('hud').classList.remove('visible');
   document.getElementById('slideshow-screen').style.display = 'none';
   document.getElementById('slides-container').innerHTML = '';
-  photos = [];
-  showAlbumScreen();
+  photos = []; showAlbumScreen();
 }
 
-// ═══════════════════════════════════════════
-//  PARAMÈTRES
-// ═══════════════════════════════════════════
 function openSettings() {
   document.getElementById('duration-slider').value = settings.duration;
   document.getElementById('duration-val').textContent = settings.duration + 's';
-  document.getElementById('transition-select').value = settings.transition;
   document.getElementById('order-select').value = settings.order;
   document.getElementById('settings-panel').style.display = 'flex';
 }
-
-function closeSettings() {
-  document.getElementById('settings-panel').style.display = 'none';
-}
-
+function closeSettings() { document.getElementById('settings-panel').style.display = 'none'; }
 function saveSettings() {
   settings.duration = parseInt(document.getElementById('duration-slider').value);
-  settings.transition = document.getElementById('transition-select').value;
   settings.order = document.getElementById('order-select').value;
-
-  // Appliquer la durée de transition CSS
-  const dur = settings.transition === 'slow-fade' ? '2.5s' : '1.2s';
-  document.querySelectorAll('.slide').forEach(s => {
-    s.style.transitionDuration = dur;
-  });
-
   localStorage.setItem('slideshow-settings', JSON.stringify(settings));
   closeSettings();
 }
 
-// ═══════════════════════════════════════════
-//  UTILS
-// ═══════════════════════════════════════════
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
+function shuffle(a) { for (let i=a.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
 
-// Charger les settings sauvegardés
-(function loadSavedSettings() {
-  const saved = localStorage.getItem('slideshow-settings');
-  if (saved) {
-    try { settings = { ...settings, ...JSON.parse(saved) }; } catch(e) {}
-  }
-})();
+document.addEventListener('dblclick', () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); });
 
-// Plein écran automatique sur tap
-document.addEventListener('dblclick', () => {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen?.();
-  } else {
-    document.exitFullscreen?.();
-  }
-});
+(function() { const s = localStorage.getItem('slideshow-settings'); if (s) try { settings = {...settings, ...JSON.parse(s)}; } catch(e) {} })();
+
+handleCallback();
 </script>
 </body>
 </html>
